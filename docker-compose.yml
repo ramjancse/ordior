@@ -1,0 +1,30 @@
+version: '3.1'
+
+services:
+  web:
+    image: odoo:18.0
+    depends_on:
+      - mydb
+    ports:
+      - "8069:8069"
+    environment:
+      - HOST=mydb
+      - USER=odoo
+      - PASSWORD=myodoo
+      - DB_NAME=odoo_db  # Specify the Odoo database name
+      - MASTER_PASSWORD=admin_master_password123  # Add your master password
+    volumes:
+      - odoo_data:/var/lib/odoo  # Persist Odoo data
+
+  mydb:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=odoo_db  # Set the Odoo database name
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=myodoo
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Persist PostgreSQL data
+
+volumes:
+  odoo_data:
+  postgres_data:
